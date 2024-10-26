@@ -6,10 +6,14 @@ import base64
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = 'uploads/'
-app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # Ограничение на 16 MB
 
+# Создаём папку для загрузок, если она не существует
 if not os.path.exists(app.config['UPLOAD_FOLDER']):
     os.makedirs(app.config['UPLOAD_FOLDER'])
+
+@app.route('/')
+def index():
+    return render_template('index.html', img_data=None)  # Инициализация img_data
 
 def process_image(image, brightness=1.0, contrast=1.0):
     target_size = (1989, 1300)
@@ -68,35 +72,28 @@ def halftone_effect(image, dot_size=12):
 
     return colored_image
 
-@app.route('/')
-def index():
-    return render_template('index.html', img_data=None)  # Инициализация img_data
-
 @app.route('/upload', methods=['POST'])
 def upload_file():
-    try:
-        if 'file' not in request.files:
-            return redirect(request.url)
-        file = request.files['file']
-        if file.filename == '':
-            return redirect(request.url)
-        
-        img = Image.open(file.stream)
-        img.save(os.path.join(app.config['UPLOAD_FOLDER'], 'uploaded_image.jpg'))
+    if 'file' not in request.files:
+        return redirect(request.url)
+    file = request.files['file']
+    if file.filename == '':
+        return redirect(request.url)
+    
+    img = Image.open(file.stream)
+    img.save(os.path.join(app.config['UPLOAD_FOLDER'], 'uploaded_image.jpg'))
 
-        # Обработка изображения с дефолтными значениями
-        processed_image = process_image(img)
-        img_io = io.BytesIO()
-        processed_image.save(img_io, 'PNG')
-        img_io.seek(0)
-        img_data = base64.b64encode(img_io.read()).decode()
+    # Обработка изображения с дефолтными значениями
+    processed_image = process_image(img)
+    img_io = io.BytesIO()
+    processed_image.save(img_io, 'PNG')
+    img_io.seek(0)
+    img_data = base64.b64encode(img_io.read()).decode()
 
-        # Сохранение оригинального изображения для скачивания
-        img.save(os.path.join(app.config['UPLOAD_FOLDER'], 'original_image.jpg'))
+    # Сохранение оригинального изображения для скачивания
+    img.save(os.path.join(app.config['UPLOAD_FOLDER'], 'original_image.jpg'))
 
-        return render_template('index.html', img_data=img_data)
-    except Exception as e:
-        return f"An error occurred: {e}", 500  # Возвращаем ошибку с сообщением
+    return render_template('index.html', img_data=img_data)
 
 @app.route('/update', methods=['POST'])
 def update_image():
@@ -124,4 +121,4 @@ def download_image():
 
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 8080))  # Используйте порт из переменной среды или 8080 по умолчанию
-    app.run(host='0.0.0.0', port=port, debug=True)  # Убедитесь, что указали хост 0.0.0.0
+    app.run(host='0.0.0.0', port=port)  # Убедитесь, что указали хост 0.0.0.0
