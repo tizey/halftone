@@ -7,6 +7,11 @@ import base64
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = 'uploads/'
 
+
+port = int(os.environ.get("PORT", 8000))
+app.run(host="0.0.0.0", port=port)
+
+
 if not os.path.exists(app.config['UPLOAD_FOLDER']):
     os.makedirs(app.config['UPLOAD_FOLDER'])
 
