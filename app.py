@@ -6,15 +6,14 @@ import base64
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = 'uploads/'
-@app.route('/')
-def home():
 
-if __name__ == '__main__':
-    port = int(os.environ.get("PORT", 8080))  # Используйте порт из переменной среды или 8080 по умолчанию
-    app.run(host='0.0.0.0', port=port)  # Убедитесь, что указали хост 0.0.0.0
-
+# Создаём папку для загрузок, если она не существует
 if not os.path.exists(app.config['UPLOAD_FOLDER']):
     os.makedirs(app.config['UPLOAD_FOLDER'])
+
+@app.route('/')
+def index():
+    return render_template('index.html', img_data=None)  # Инициализация img_data
 
 def process_image(image, brightness=1.0, contrast=1.0):
     target_size = (1989, 1300)
@@ -73,10 +72,6 @@ def halftone_effect(image, dot_size=12):
 
     return colored_image
 
-@app.route('/')
-def index():
-    return render_template('index.html', img_data=None)  # Изменено для инициализации img_data
-
 @app.route('/upload', methods=['POST'])
 def upload_file():
     if 'file' not in request.files:
@@ -125,4 +120,5 @@ def download_image():
     return send_file(os.path.join(app.config['UPLOAD_FOLDER'], 'edited_image.png'), as_attachment=True)
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    port = int(os.environ.get("PORT", 8080))  # Используйте порт из переменной среды или 8080 по умолчанию
+    app.run(host='0.0.0.0', port=port)  # Убедитесь, что указали хост 0.0.0.0
