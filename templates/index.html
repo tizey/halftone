@@ -33,6 +33,15 @@
     <img src="data:image/png;base64,{{ img_data }}" alt="Processed Image" />
 {% endif %}
 
+<!-- Ползунки для яркости и контраста -->
+<div>
+    <input type="range" id="brightness" min="0" max="2" step="0.1" value="1" onchange="updateImage()">
+    <label for="brightness">Brightness</label>
+    
+    <input type="range" id="contrast" min="0" max="2" step="0.1" value="1" onchange="updateImage()">
+    <label for="contrast">Contrast</label>
+</div>
+
 <script>
     let dropArea = document.getElementById('drop-area');
 
@@ -63,6 +72,27 @@
         .then(response => response.text())
         .then(data => {
             document.body.innerHTML = data;  // Обновляем содержимое страницы
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    }
+
+    function updateImage() {
+        const brightness = document.getElementById('brightness').value;
+        const contrast = document.getElementById('contrast').value;
+
+        fetch('/update', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: `brightness=${brightness}&contrast=${contrast}`
+        })
+        .then(response => response.json())
+        .then(data => {
+            const imgElement = document.querySelector('img');
+            imgElement.src = 'data:image/png;base64,' + data.img_data; // Обновляем изображение
         })
         .catch(error => {
             console.error('Error:', error);
