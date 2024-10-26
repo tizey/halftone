@@ -8,7 +8,7 @@ app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = 'uploads/'
 
 
-port = int(os.environ.get("PORT", 8080))  # 8080 — значение по умолчанию
+port = int(os.environ.get("PORT", 5000))  # 8080 — значение по умолчанию
 app.run(host="0.0.0.0", port=port)
 
 if not os.path.exists(app.config['UPLOAD_FOLDER']):
