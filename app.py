@@ -72,9 +72,9 @@ def halftone_effect(image, dot_size=12):
         for y in range(halftone_image.height):
             value = halftone_image.getpixel((x, y))
             if value == 255:
-                colored_image.putpixel((x, y), (231, 66, 24))  # Оранжевый цвет
+                colored_image.putpixel((x, y), (206, 58, 21))  # Оранжевый цвет
             else:
-                colored_image.putpixel((x, y), (19, 6, 4))  # Черный цвет
+                colored_image.putpixel((x, y), (24, 7, 2))  # Черный цвет
 
     return colored_image
 
