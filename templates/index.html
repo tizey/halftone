@@ -3,8 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Редактор изображений</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+
+    <title>pf-photo-editing</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -13,108 +15,149 @@
             align-items: center;
             justify-content: center;
             margin: 0;
-            padding: 20px;
-            background-color: #f4f4f4;
+            padding: 40px;
+            background-color: #000000   ;
         }
         h1 {
-            color: #333;
+            color: #fff;
+            text-align: center;
         }
         #upload-area {
-            border: 2px dashed #ccc;
+            
+            background-color: #141414;
+            background-image: url("data:image/svg+xml,%3csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3e%3crect width='100%25' height='100%25' fill='none' rx='19' ry='19' stroke='%23383838FF' stroke-width='2' stroke-dasharray='12' stroke-dashoffset='0' stroke-linecap='square'/%3e%3c/svg%3e");
             width: 764px;
-            height: 80px;
+            height: 120px;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 20px 0;
+            margin-top: 50px;
             position: relative;
-            background-color: #ffffff;
-            border-radius: 15px;
+            background-color: #141414;
+            border-radius: 19px;
+          
         }
         .upload-button {
-            background-color: #000;
+            background-color: #282828;
             border: none;
             padding: 15px 30px;
             border-radius: 15px;
             cursor: pointer;
+            color: white;
             transition: background-color 0.3s;
             z-index: 1;
         }
         .upload-button:hover {
-            background-color: #d0d0d0;
+            background-color: #3C3C3C;
         }
         #image-preview {
             max-width: 764px;
             max-height: 500px;
             margin: 20px 0;
             cursor: pointer;
-            display: none; /* Скрываем по умолчанию */
+            display: none;
         }
         .slider-container {
+            display: flex;
+            justify-content: space;
+            align-items: center;
+            gap: 50px;
             margin: 20px 0;
         }
         input[type="range"] {
-    -webkit-appearance: none; /* Убираем стандартный стиль */
-    appearance: none;
-    width: 100%;
-    height: 10px; /* Высота ползунка */
-    border-radius: 5px; /* Скругление краев */
-    background: #ddd; /* Цвет фона слайдера */
-    outline: none; /* Убираем обводку при фокусе */
-}
-
-input[type="range"]::-webkit-slider-thumb {
-    -webkit-appearance: none; /* Убираем стандартный стиль для ползунка */
-    appearance: none;
-    width: 20px; /* Ширина ползунка */
-    height: 20px; /* Высота ползунка */
-    border-radius: 50%; /* Скругленный ползунок */
-    background: #E74218; /* Цвет ползунка */
-    cursor: pointer; /* Курсор при наведении */
-}
-
-input[type="range"]::-moz-range-thumb {
-    width: 20px; /* Ширина ползунка */
-    height: 20px; /* Высота ползунка */
-    border-radius: 50%; /* Скругленный ползунок */
-    background: #28a745; /* Цвет ползунка */
-    cursor: pointer; /* Курсор при наведении */
-}
-        button {
-            background-color: #E74218;
-            color: white;
+            -webkit-appearance: none;
+            appearance: none;
+            width: 150px;
+            height: 10px;
+            border-radius: 3px;
+            background: #1E1E1E;
+            outline: none;
+        }
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            background: #fff;
+            cursor: pointer;
+        }
+        input[type="range"]::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #E74218;
+            cursor: pointer;
+        }
+        #download-button {
+            background-color: #fff;
+            color: #000;
             border: none;
-            padding: 32px 56px;
+            padding: 25px 65px;
             border-radius: 15px;
             cursor: pointer;
             transition: background-color 0.3s;
-        
+            margin-top: 30px;
+        }
+        #download-button:hover {
+            background-color: #EBEBEB;
+        }
+        label {
+            font-weight: regular;
+            color: #727272;
+            margin-right: 5px;
         }
 
-        #download-button {
+        #h_cap {
 
-            margin-top: 50px;
+            color: #fff;
+            margin-bottom: 30px;
         }
-        button:hover {
-            background-color: #218838;
+
+        h1 {
+            margin-bottom: 0px;
+        }
+
+        #area_cap {
+            margin-top: 20px;
+            margin-bottom: 80px;
+            color: #494949;
+            font-size: 13px;
         }
     </style>
 </head>
 <body>
-    <h1>Upload your image</h1>
+    <h1>PDF Cover Generator</h1>
+    <p id="h_cap">Drag a photo to the area below, or click the “Select Image” button</p>
+
+
     <div id="upload-area" ondragover="event.preventDefault()" ondrop="handleDrop(event)">
         <button class="upload-button" onclick="document.getElementById('file-input').click();">Select Image</button>
         <input type="file" id="file-input" accept="image/*" style="display:none;" onchange="uploadFile(this)">
     </div>
-    
+      <p id="area_cap">.jpg / .png  (files larger than 2 mb are not recommended)</p>
     <img id="image-preview" src="" alt="Image Preview">
+    
     <div class="slider-container">
-        <label for="brightness">Яркость</label>
-        <input type="range" id="brightness" min="0" max="2" step="0.1" value="1" oninput="updateImage()">
-        <label for="contrast">Контраст</label>
-        <input type="range" id="contrast" min="0" max="2" step="0.1" value="1" oninput="updateImage()">
+        <div>
+            <label for="brightness">Brightness</label>
+            <input type="range" id="brightness" min="0" max="2" step="0.1" value="1" oninput="updateImage()">
+        </div>
+        <div>
+            <label for="contrast">Contrast</label>
+            <input type="range" id="contrast" min="0" max="2" step="0.1" value="1" oninput="updateImage()">
+        </div>
+        <div>
+            <label for="dot_size">Dot size</label>
+            <input type="range" id="dot_size" min="1" max="20" step="1" value="12" oninput="updateImage()">
+        </div>
     </div>
-    <button id="download-button" onclick="downloadImage()">Скачать отредактированное изображение</button>
+
+
+
+<button id="download-button" onclick="downloadImage()">
+    <i class="fas fa-cloud-download-alt" style="margin-right: 10px;"></i> Download the result
+</button>
 
     <script>
         function handleDrop(event) {
@@ -145,17 +188,19 @@ input[type="range"]::-moz-range-thumb {
         function updateImage() {
             const brightness = document.getElementById('brightness').value;
             const contrast = document.getElementById('contrast').value;
+            const dot_size = document.getElementById('dot_size').value;
 
             fetch('/update', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded'
                 },
-                body: `brightness=${brightness}&contrast=${contrast}`
+                body: `brightness=${brightness}&contrast=${contrast}&dot_size=${dot_size}`
             })
             .then(response => response.json())
             .then(data => {
                 document.getElementById('image-preview').src = 'data:image/png;base64,' + data.img_data;
+                document.getElementById('image-preview').style.display = 'block';
             })
             .catch(error => console.error('Ошибка:', error));
         }
@@ -167,7 +212,7 @@ input[type="range"]::-moz-range-thumb {
         // Устанавливаем изображение при загрузке
         if ({{ img_data|tojson|safe }}) {
             document.getElementById('image-preview').src = 'data:image/png;base64,{{ img_data }}';
-            document.getElementById('image-preview').style.display = 'block'; // Показываем превью
+            document.getElementById('image-preview').style.display = 'block';
         }
     </script>
 </body>
