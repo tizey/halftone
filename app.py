@@ -9,6 +9,10 @@ app = Flask(__name__)
 
 app.config['UPLOAD_FOLDER'] = 'uploads/'
 
+# Замените 'certs/fullchain.pem' и 'certs/private.key' на путь к вашим файлам
+app.run(ssl_context=('certs/fullchain.pem', 'certs/private.key'))
+
+
 # Создаём папку для загрузки, если её не существует
 if not os.path.exists(app.config['UPLOAD_FOLDER']):
     os.makedirs(app.config['UPLOAD_FOLDER'])
