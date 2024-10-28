@@ -6,11 +6,19 @@ import base64
 
 app = Flask(__name__)
 
+# Создайте временные файлы для сертификатов
+with open("/tmp/fullchain.pem", "w") as cert_file:
+    cert_file.write(os.getenv("SSL_CERT"))
+
+with open("/tmp/private.key", "w") as key_file:
+    key_file.write(os.getenv("SSL_KEY"))
+
+# Укажите путь к временным файлам
+app.run(ssl_context=('/tmp/fullchain.pem', '/tmp/private.key'))
 
 app.config['UPLOAD_FOLDER'] = 'uploads/'
 
-# Замените 'certs/fullchain.pem' и 'certs/private.key' на путь к вашим файлам
-app.run(ssl_context=('certs/fullchain.pem', 'certs/private.key'))
+
 
 
 # Создаём папку для загрузки, если её не существует
