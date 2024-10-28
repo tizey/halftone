@@ -5,6 +5,11 @@ import io
 import base64
 
 app = Flask(__name__)
+
+
+# Замените 'certs/fullchain.pem' и 'certs/private.key' на путь к вашим файлам
+app.run(ssl_context=('certs/fullchain.pem', 'certs/private.key'))
+
 app.config['UPLOAD_FOLDER'] = 'uploads/'
 
 # Создаём папку для загрузки, если её не существует
